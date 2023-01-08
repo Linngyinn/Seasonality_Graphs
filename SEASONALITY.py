@@ -36,10 +36,10 @@ config_object = ConfigParser()
 # }
 
 # #Write the above sections to config.ini file
-# with open('Z:\Business\Personnel\Ling Yin\Seasonality/config.ini', 'w') as conf:
+# with open('Z:\Seasonality/config.ini', 'w') as conf:
 #     config_object.write(conf)
         
-config_object.read("Z:\Business\Personnel\Ling Yin\Seasonality/config.ini")
+config_object.read("Z:\Seasonality/config.ini")
 now = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 today = datetime.datetime.now().strftime("%Y-%m-%d")
 
@@ -82,99 +82,6 @@ if sec_date["Status"] == "On":
                 df["pct_chg"] = df["last_price"]/df["last_price"][df["Dates"] == date].values[0] - 1
                 df["diff"] = 100* (df["last_price"] - df["last_price"][df["Dates"] == date].values[0])
     
-            #     if sec_date["Frequencies"].split(", ")[i] == "W":
-            #         df["DayOfWeek"] = df["Dates"].dt.dayofweek
-            #         #get every same day of the week
-            #         dataf = df.loc[df['DayOfWeek'] == df["DayOfWeek"][df["Dates"] == date].values[0]]
-            #         #if day of the week dont exist for certain weeks due to hols, use previous workday
-            #         if dataf["Dates"].diff().dt.days.dropna().unique() != 7:
-            #             dataf.reset_index(inplace = True)
-            #             dataf["date_diff"] = dataf["Dates"].diff().dt.days
-            #             df1 = pd.DataFrame(data = pd.date_range(start=df["Dates"].min(),end=df["Dates"].max()), columns = ["raw dates"])
-                        
-            #             df1["W_D"] = df1["raw dates"].dt.dayofweek
-            #             df1 = df1[df1['W_D'].isin([df1["W_D"][df1["raw dates"] == date].values[0]])]
-            #             #find missing dates
-            #             main_list = list(set(list(df1["raw dates"])) - set(list(dataf["Dates"])))
-            #             #get new dates
-            #             new_list = []
-            #             for timestamp in main_list:
-            #                 if timestamp not in df["Dates"]:
-            #                     timestamp = list(df["Dates"][df["Dates"] < timestamp])[-1].strftime("%Y-%m-%d")
-            #                     new_list.append(timestamp)
-            #                 else:
-            #                     new_list.append(timestamp)
-            #             add_df = pd.DataFrame(new_list, columns=['Dates'])
-            #             add_df["Dates"]= add_df["Dates"].astype('datetime64')
-            #             add_df = add_df.merge(df, on='Dates', how='inner')
-            #             dataf = dataf.append(add_df)
-            #             #insert new dates, sort dates
-            #             dataf["Dates"] = pd.to_datetime(dataf["Dates"])
-            #             dataf.sort_values("Dates", inplace = True)
-            #             df = dataf.drop(columns=['index', 'date_diff']).reset_index().drop(columns = ['index'])
-            #         else: 
-            #             df = dataf
-                
-            #     if sec_date["Frequencies"].split(", ")[i] == "M":
-            #         df["DayOfMonth"] = df["Dates"].dt.day
-            #         #base day 31, but if 28th feb, will drop 28th in period 10, hence missing data 
-            #         #if 31st null, use 30th, null, use 29th, null, use 28th
-            #         dataf = df.loc[df['DayOfMonth'] == df["DayOfMonth"][df["Dates"] == date].values[0]]
-            #         if any(d not in [31, 30, 29, 28] for d in dataf["Dates"].diff().dt.days.dropna().unique()):
-            #             dataf.reset_index(inplace = True)
-            #             dataf["date_diff"] = dataf["Dates"].diff().dt.days
-            #             df1 = pd.DataFrame(data = pd.date_range(start=df["Dates"].min(),end=df["Dates"].max()), columns = ["raw dates"])
-                        
-            #             df1["W_D"] = df1["raw dates"].dt.day
-            #             df1 = df1[df1['W_D'].isin([df1["W_D"][df1["raw dates"] == date].values[0]])]
-                            
-            #             main_list = list(set(list(df1["raw dates"])) - set(list(dataf["Dates"])))
-            #             new_list = []
-            #             for timestamp in main_list:
-            #                 if timestamp not in df["Dates"]:
-            #                     timestamp = list(df["Dates"][df["Dates"] < timestamp])[-1].strftime("%Y-%m-%d")
-            #                     new_list.append(timestamp)
-            #                 else:
-            #                     new_list.append(timestamp)
-            #             add_df = pd.DataFrame(new_list, columns=['Dates'])
-            #             add_df["Dates"]= add_df["Dates"].astype('datetime64')
-            #             add_df = add_df.merge(df, on='Dates', how='inner')
-            #             dataf = dataf.append(add_df)
-            #             dataf["Dates"] = pd.to_datetime(dataf["Dates"])
-            #             dataf.sort_values("Dates", inplace = True)
-            #             df = dataf.drop(columns=['index', 'date_diff']).reset_index().drop(columns = ['index'])
-            #         else: 
-            #             df = dataf
-    
-            #     if sec_date["Frequencies"].split(", ")[i] == "Q":
-            #         df["DayOfQuarter"] = (df["Dates"].dt.dayofyear % 91.25).apply(np.ceil)
-            #         df.loc[df["Dates"].dt.dayofyear.isin([365, 366]), "DayOfQuarter"] = 91
-            #         dataf = df.loc[df['DayOfQuarter'] == df["DayOfQuarter"][df["Dates"] == date].values[0]]
-            #         if any(d not in [1, 2, 3, 90, 91, 92] for d in dataf["Dates"].diff().dt.days.dropna().unique()):
-            #             dataf.reset_index(inplace = True)
-            #             dataf["date_diff"] = dataf["Dates"].diff().dt.days
-            #             df1 = pd.DataFrame(data = pd.date_range(start=df["Dates"].min(),end=df["Dates"].max()), columns = ["raw dates"])
-    
-            #             df1["W_D"] = (df1["raw dates"].dt.dayofyear % 91.25).apply(np.ceil)
-            #             df1.loc[df1["raw dates"].dt.dayofyear.isin([365, 366]), "W_D"] = 91
-            #             df1 = df1[df1['W_D'].isin([df1["W_D"][df1["raw dates"] == date].values[0]])]
-            #             main_list = list(set(list(df1["raw dates"])) - set(list(dataf["Dates"])))
-            #             new_list = []
-            #             for timestamp in main_list:
-            #                 if timestamp not in df["Dates"]:
-            #                     timestamp = list(df["Dates"][df["Dates"] < timestamp])[-1].strftime("%Y-%m-%d")
-            #                     new_list.append(timestamp)
-            #                 else:
-            #                     new_list.append(timestamp)
-            #             add_df = pd.DataFrame(new_list, columns=['Dates'])
-            #             add_df["Dates"]= add_df["Dates"].astype('datetime64')
-            #             add_df = add_df.merge(df, on='Dates', how='inner')
-            #             dataf = dataf.append(add_df)
-            #             dataf["Dates"] = pd.to_datetime(dataf["Dates"])
-            #             dataf.sort_values("Dates", inplace = True)
-            #             df = dataf.drop(columns=['index', 'date_diff']).reset_index().drop(columns = ['index'])
-            #         else: 
-            #             df = dataf
                      
                 if sec_date["Frequencies"].split(", ")[i] == "Q":
                     df["Period"] = (df["Dates"] - pd.to_datetime(date))/np.timedelta64(3,"M")
@@ -203,16 +110,16 @@ if sec_date["Status"] == "On":
             fig_line_diff.add_vline(x=0, line_width=1, line_dash="dash")
             fig_line_diff.update_layout(title_text= str(sec) + '_Diff_' + str(sec_date["Period"].split(", ")[i]) + str(sec_date["Frequencies"].split(", ")[i]), title_x=0.5)
             
-            if os.path.exists(r"Z:\Business\Personnel\Ling Yin\Seasonality/" + str(today)):
+            if os.path.exists(r"Z:\Seasonality/" + str(today)):
                 
-                #with open(r"Z:\Business\Personnel\Ling Yin\Seasonality/"+ str(today)+"/Date_Analysis_" + str(now) + ".html", 'a') as f:
-                with open(r"Z:\Business\Personnel\Ling Yin\Seasonality/"+ str(today)+"/" + str(sec_date["Output_name"]) + ".html", 'a') as f:
+                #with open(r"Z:\Seasonality/"+ str(today)+"/Date_Analysis_" + str(now) + ".html", 'a') as f:
+                with open(r"Z:\Seasonality/"+ str(today)+"/" + str(sec_date["Output_name"]) + ".html", 'a') as f:
                     # f.write(fig_line_pc.to_html(full_html=False, include_plotlyjs='cdn'))
                     f.write(fig_line_diff.to_html(full_html=False, include_plotlyjs='cdn'))
                     
             else:
-                os.mkdir(r"Z:\Business\Personnel\Ling Yin\Seasonality/" + str(today))
-                with open(r"Z:\Business\Personnel\Ling Yin\Seasonality/"+ str(today)+"/" + str(sec_date["Output_name"]) + ".html", 'a') as f:
+                os.mkdir(r"Z:\Seasonality/" + str(today))
+                with open(r"Z:\Seasonality/"+ str(today)+"/" + str(sec_date["Output_name"]) + ".html", 'a') as f:
                     # f.write(fig_line_pc.to_html(full_html=False, include_plotlyjs='cdn'))
                     f.write(fig_line_diff.to_html(full_html=False, include_plotlyjs='cdn'))
     
@@ -251,98 +158,7 @@ if date_sec["Status"] == "On":
                 
                 df["pct_chg"] = df["last_price"]/df["last_price"][df["Dates"] == date].values[0] - 1
                 df["diff"] = 100* (df["last_price"] - df["last_price"][df["Dates"] == date].values[0])
-                
-    #             if date_sec["Frequencies"].split(", ")[i] == "W":
-    #                 df["DayOfWeek"] = df["Dates"].dt.dayofweek
-    #                 #get every same day of the week
-    #                 dataf = df.loc[df['DayOfWeek'] == df["DayOfWeek"][df["Dates"] == date].values[0]]
-    #                 #if day of the week dont exist for certain weeks due to hols, use previous workday
-    #                 if dataf["Dates"].diff().dt.days.dropna().unique() != 7:
-    #                     dataf.reset_index(inplace = True)
-    #                     dataf["date_diff"] = dataf["Dates"].diff().dt.days
-    #                     df1 = pd.DataFrame(data = pd.date_range(start=df["Dates"].min(),end=df["Dates"].max()), columns = ["raw dates"])
-                        
-    #                     df1["W_D"] = df1["raw dates"].dt.dayofweek
-    #                     df1 = df1[df1['W_D'].isin([df1["W_D"][df1["raw dates"] == date].values[0]])]
-    #                     #find missing dates
-    #                     main_list = list(set(list(df1["raw dates"])) - set(list(dataf["Dates"])))
-    #                     #get new dates
-    #                     new_list = []
-    #                     for timestamp in main_list:
-    #                         if timestamp not in df["Dates"]:
-    #                             timestamp = list(df["Dates"][df["Dates"] < timestamp])[-1].strftime("%Y-%m-%d")
-    #                             new_list.append(timestamp)
-    #                         else:
-    #                             new_list.append(timestamp)
-    #                     add_df = pd.DataFrame(new_list, columns=['Dates'])
-    #                     add_df["Dates"]= add_df["Dates"].astype('datetime64')
-    #                     add_df = add_df.merge(df, on='Dates', how='inner')
-    #                     dataf = dataf.append(add_df)
-    #                     #insert new dates, sort dates
-    #                     dataf["Dates"] = pd.to_datetime(dataf["Dates"])
-    #                     dataf.sort_values("Dates", inplace = True)
-    #                     df = dataf.drop(columns=['index', 'date_diff']).reset_index().drop(columns = ['index'])
-    #                 else: 
-    #                     df = dataf
-                
-    #             if date_sec["Frequencies"].split(", ")[i] == "M":
-    #                 df["DayOfMonth"] = df["Dates"].dt.day
-    #                 dataf = df.loc[df['DayOfMonth'] == df["DayOfMonth"][df["Dates"] == date].values[0]]
-    #                 if any(d not in [31, 30, 29, 28] for d in dataf["Dates"].diff().dt.days.dropna().unique()):
-    #                     dataf.reset_index(inplace = True)
-    #                     dataf["date_diff"] = dataf["Dates"].diff().dt.days
-    #                     df1 = pd.DataFrame(data = pd.date_range(start=df["Dates"].min(),end=df["Dates"].max()), columns = ["raw dates"])
-                        
-    #                     df1["W_D"] = df1["raw dates"].dt.day
-    #                     df1 = df1[df1['W_D'].isin([df1["W_D"][df1["raw dates"] == date].values[0]])]
-    #                     main_list = list(set(list(df1["raw dates"])) - set(list(dataf["Dates"])))
-    #                     new_list = []
-    #                     for timestamp in main_list:
-    #                         if timestamp not in df["Dates"]:
-    #                             timestamp = list(df["Dates"][df["Dates"] < timestamp])[-1].strftime("%Y-%m-%d")
-    #                             new_list.append(timestamp)
-    #                         else:
-    #                             new_list.append(timestamp)
-    #                     add_df = pd.DataFrame(new_list, columns=['Dates'])
-    #                     add_df["Dates"]= add_df["Dates"].astype('datetime64')
-    #                     add_df = add_df.merge(df, on='Dates', how='inner')
-    #                     dataf = dataf.append(add_df)
-    #                     dataf["Dates"] = pd.to_datetime(dataf["Dates"])
-    #                     dataf.sort_values("Dates", inplace = True)
-    #                     df = dataf.drop(columns=['index', 'date_diff']).reset_index().drop(columns = ['index'])
-    #                 else: 
-    #                     df = dataf
-    
-    #             if date_sec["Frequencies"].split(", ")[i] == "Q":
-    #                 df["DayOfQuarter"] = (df["Dates"].dt.dayofyear % 91.25).apply(np.ceil)
-    #                 df.loc[df["Dates"].dt.dayofyear.isin([365, 366]), "DayOfQuarter"] = 91
-    #                 dataf = df.loc[df['DayOfQuarter'] == df["DayOfQuarter"][df["Dates"] == date].values[0]]
-    #                 if any(d not in [1, 2, 3, 90, 91, 92] for d in dataf["Dates"].diff().dt.days.dropna().unique()):
-    #                     dataf.reset_index(inplace = True)
-    #                     dataf["date_diff"] = dataf["Dates"].diff().dt.days
-    #                     df1 = pd.DataFrame(data = pd.date_range(start=df["Dates"].min(),end=df["Dates"].max()), columns = ["raw dates"])
-    
-    #                     df1["W_D"] = (df1["raw dates"].dt.dayofyear % 91.25).apply(np.ceil)
-    #                     df1.loc[df1["raw dates"].dt.dayofyear.isin([365, 366]), "W_D"] = 91
-    #                     df1 = df1[df1['W_D'].isin([df1["W_D"][df1["raw dates"] == date].values[0]])]
-    #                     main_list = list(set(list(df1["raw dates"])) - set(list(dataf["Dates"])))
-    #                     new_list = []
-    #                     for timestamp in main_list:
-    #                         if timestamp not in df["Dates"]:
-    #                             timestamp = list(df["Dates"][df["Dates"] < timestamp])[-1].strftime("%Y-%m-%d")
-    #                             new_list.append(timestamp)
-    #                         else:
-    #                             new_list.append(timestamp)
-    #                     add_df = pd.DataFrame(new_list, columns=['Dates'])
-    #                     add_df["Dates"]= add_df["Dates"].astype('datetime64')
-    #                     add_df = add_df.merge(df, on='Dates', how='inner')
-    #                     dataf = dataf.append(add_df)
-    #                     dataf["Dates"] = pd.to_datetime(dataf["Dates"])
-    #                     dataf.sort_values("Dates", inplace = True)
-    #                     df = dataf.drop(columns=['index', 'date_diff']).reset_index().drop(columns = ['index'])
-    #                 else: 
-    #                     df = dataf
-    
+              
                 if date_sec["Frequencies"].split(", ")[i] == "Q":
                     df["Period"] = (df["Dates"] - pd.to_datetime(date))/np.timedelta64(3,"M")
                 else:
@@ -368,15 +184,15 @@ if date_sec["Status"] == "On":
             fig_line_diff.add_vline(x=date, line_width=1, line_dash="dash")
             fig_line_diff.update_layout(title_text=str(date) + '_Diff_' + str(date_sec["Period"].split(", ")[i]) + str(date_sec["Frequencies"].split(", ")[i]), title_x=0.5)
             
-            if os.path.exists(r"Z:\Business\Personnel\Ling Yin\Seasonality/" + str(today)):
+            if os.path.exists(r"Z:\Seasonality/" + str(today)):
                 
-                with open(r"Z:\Business\Personnel\Ling Yin\Seasonality/"+ str(today)+"/" + str(date_sec["Output_name"]) + ".html", 'a') as f:
+                with open(r"Z:\Seasonality/"+ str(today)+"/" + str(date_sec["Output_name"]) + ".html", 'a') as f:
                     # f.write(fig_line_pc.to_html(full_html=False, include_plotlyjs='cdn'))
                     f.write(fig_line_diff.to_html(full_html=False, include_plotlyjs='cdn'))
                     
             else:
-                os.mkdir(r"Z:\Business\Personnel\Ling Yin\Seasonality/" + str(today))
-                with open(r"Z:\Business\Personnel\Ling Yin\Seasonality/"+ str(today)+"/" + str(date_sec["Output_name"]) + ".html", 'a') as f:
+                os.mkdir(r"Z:\Seasonality/" + str(today))
+                with open(r"Z:\Seasonality/"+ str(today)+"/" + str(date_sec["Output_name"]) + ".html", 'a') as f:
                     # f.write(fig_line_pc.to_html(full_html=False, include_plotlyjs='cdn'))
                     f.write(fig_line_diff.to_html(full_html=False, include_plotlyjs='cdn'))
    
@@ -414,14 +230,14 @@ if sec_change["Status"] == "On":
             fig_line_diff.add_hline(y=0, line_width=1, line_dash="dash")
             fig_line_diff.update_layout(title_text=str(sec) + '_Diff_' + str(sec_change["Frequencies"].split(", ")[i]), title_x=0.5)
             
-            if os.path.exists(r"Z:\Business\Personnel\Ling Yin\Seasonality/" + str(today)):
+            if os.path.exists(r"Z:\Seasonality/" + str(today)):
                 
-                with open(r"Z:\Business\Personnel\Ling Yin\Seasonality/"+ str(today)+"/" + str(sec_change["Output_name"]) + ".html", 'a') as f:
+                with open(r"Z:\Seasonality/"+ str(today)+"/" + str(sec_change["Output_name"]) + ".html", 'a') as f:
                     # f.write(fig_line_pc.to_html(full_html=False, include_plotlyjs='cdn'))
                     f.write(fig_line_diff.to_html(full_html=False, include_plotlyjs='cdn'))
                     
             else:
-                os.mkdir(r"Z:\Business\Personnel\Ling Yin\Seasonality/" + str(today))
-                with open(r"Z:\Business\Personnel\Ling Yin\Seasonality/"+ str(today)+"/" + str(sec_change["Output_name"]) + ".html", 'a') as f:
+                os.mkdir(r"Z:\Seasonality/" + str(today))
+                with open(r"Z:\Seasonality/"+ str(today)+"/" + str(sec_change["Output_name"]) + ".html", 'a') as f:
                     # f.write(fig_line_pc.to_html(full_html=False, include_plotlyjs='cdn'))
                     f.write(fig_line_diff.to_html(full_html=False, include_plotlyjs='cdn'))
